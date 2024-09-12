@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/components/choice_button.dart';
+import 'package:flutter_application_1/components/computer_choice_display.dart';
 import 'dart:math';
+
+import 'package:flutter_application_1/components/score_display.dart';
 
 class JokempoPage extends StatefulWidget {
   const JokempoPage({super.key});
@@ -9,19 +13,12 @@ class JokempoPage extends StatefulWidget {
 }
 
 class _JokempoPageState extends State<JokempoPage> {
-  TextEditingController text = TextEditingController();
   int playerScore = 0;
   int computerScore = 0;
   String resultMessage = '';
   String computerChoice = '';
 
   final List<String> choices = ['PEDRA', 'PAPEL', 'TESOURA'];
-
-  @override
-  void dispose() {
-    text.dispose();
-    super.dispose();
-  }
 
   void playGame(String playerChoice) {
     final random = Random();
@@ -44,6 +41,7 @@ class _JokempoPageState extends State<JokempoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[350],
       appBar: AppBar(
         backgroundColor: Colors.amber,
         title: Row(
@@ -76,86 +74,25 @@ class _JokempoPageState extends State<JokempoPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: choices.map((choice) {
-                String imagePath = 'assets/images/${choice}.png';
-                return GestureDetector(
+                return ChoiceButton(
+                  choice: choice,
                   onTap: () => playGame(choice),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          spreadRadius: 5,
-                          blurRadius: 5,
-                          offset: Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundImage: AssetImage(imagePath),
-                    ),
-                  ),
                 );
               }).toList(),
             ),
             SizedBox(height: 50),
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    spreadRadius: 5,
-                    blurRadius: 5,
-                    offset: Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: CircleAvatar(
-                radius: 60,
-                backgroundImage: computerChoice.isNotEmpty
-                    ? AssetImage('assets/images/${computerChoice}.png')
-                    : null,
-                child: computerChoice.isEmpty
-                    ? Text(
-                        'Escolha',
-                        style: TextStyle(color: Colors.white),
-                      )
-                    : null,
-              ),
-            ),
+            ComputerChoiceDisplay(computerChoice: computerChoice),
             SizedBox(height: 20),
-            Text(
-              'COMPUTADOR: ${computerChoice.toUpperCase()}',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            Container(
-              padding: EdgeInsets.all(16.0),
-              margin: EdgeInsets.symmetric(vertical: 10.0),
-              decoration: BoxDecoration(
-                color: Colors.amber,
-                borderRadius: BorderRadius.circular(8.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    spreadRadius: 3,
-                    blurRadius: 5,
-                    offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Text(
-                'Você: $playerScore  |  Computador: $computerScore',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                ),
-              ),
-            ),
+            ScoreDisplay(playerScore: playerScore, computerScore: computerScore),
           ],
         ),
       ),
     );
   }
 }
+
+
+
+
+
+
