@@ -13,6 +13,7 @@ class _JokempoPageState extends State<JokempoPage> {
   int playerScore = 0;
   int computerScore = 0;
   String resultMessage = '';
+  String computerChoice = '';
 
   final List<String> choices = ['PEDRA', 'PAPEL', 'TESOURA'];
 
@@ -24,7 +25,7 @@ class _JokempoPageState extends State<JokempoPage> {
 
   void playGame(String playerChoice) {
     final random = Random();
-    String computerChoice = choices[random.nextInt(choices.length)];
+    computerChoice = choices[random.nextInt(choices.length)];
 
     if (playerChoice == computerChoice) {
       resultMessage = 'Empatou!';
@@ -44,7 +45,23 @@ class _JokempoPageState extends State<JokempoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 32, 245, 39),
+        backgroundColor: Colors.amber,
+        title: Row(
+          children: [
+            Icon(Icons.sports_baseball, size: 28),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                "Pedra, Papel e Tesoura",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(14.0),
@@ -59,31 +76,79 @@ class _JokempoPageState extends State<JokempoPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: choices.map((choice) {
-                String imagePath = 'assets/images/${choice}.png'; 
+                String imagePath = 'assets/images/${choice}.png';
                 return GestureDetector(
                   onTap: () => playGame(choice),
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundImage: AssetImage(imagePath),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          spreadRadius: 5,
+                          blurRadius: 5,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundImage: AssetImage(imagePath),
+                    ),
                   ),
                 );
               }).toList(),
             ),
             SizedBox(height: 50),
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    spreadRadius: 5,
+                    blurRadius: 5,
+                    offset: Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: CircleAvatar(
+                radius: 60,
+                backgroundImage: computerChoice.isNotEmpty
+                    ? AssetImage('assets/images/${computerChoice}.png')
+                    : null,
+                child: computerChoice.isEmpty
+                    ? Text(
+                        'Escolha',
+                        style: TextStyle(color: Colors.white),
+                      )
+                    : null,
+              ),
+            ),
+            SizedBox(height: 20),
             Text(
-              'COMPUTADOR: ${choices[Random().nextInt(choices.length)].toUpperCase()}',
-              style: TextStyle(fontSize: 16),
+              'COMPUTADOR: ${computerChoice.toUpperCase()}',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             Container(
               padding: EdgeInsets.all(16.0),
               margin: EdgeInsets.symmetric(vertical: 10.0),
               decoration: BoxDecoration(
-                color: Colors.grey,
+                color: Colors.amber,
                 borderRadius: BorderRadius.circular(8.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    spreadRadius: 3,
+                    blurRadius: 5,
+                    offset: Offset(0, 3),
+                  ),
+                ],
               ),
               child: Text(
                 'Você: $playerScore  |  Computador: $computerScore',
                 style: const TextStyle(
+                  fontWeight: FontWeight.bold,
                   fontSize: 24,
                 ),
               ),

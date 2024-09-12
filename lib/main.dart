@@ -3,9 +3,10 @@ import 'package:flutter_application_1/views/page_jokempo.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: const JokempoPage(),
+    debugShowCheckedModeBanner: false,
     theme: ThemeData(
-      useMaterial3: false
+      useMaterial3: true
     ),
+    home: const JokempoPage(),
   ));
 }
